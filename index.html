@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRU PGWP-Eligible Program Fee Calculator</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --ink: #17324d;
+      --muted: #5a6b7b;
+      --line: #d9e2ec;
+      --accent: #005691;
+      --accent-2: #0a7cc2;
+      --warn: #b55d00;
+      --good: #0a7f55;
+      --soft: #eef5fb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #eef5fb 100%);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(23, 50, 77, 0.06);
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      color: var(--accent);
+    }
+    .sub {
+      color: var(--muted);
+      margin: 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(23, 50, 77, 0.05);
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      color: var(--ink);
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      font-size: 15px;
+      color: var(--ink);
+      background: #fff;
+    }
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .suggestions {
+      margin-top: 8px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      overflow: hidden;
+      max-height: 320px;
+      overflow-y: auto;
+      display: none;
+    }
+    .suggestion {
+      padding: 12px 14px;
+      border-bottom: 1px solid #edf2f7;
+      cursor: pointer;
+    }
+    .suggestion:last-child { border-bottom: 0; }
+    .suggestion:hover { background: var(--soft); }
+    .suggestion-title { font-weight: 700; }
+    .suggestion-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0 6px 6px 0;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fff;
+    }
+    .stat .k { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .stat .v { font-size: 22px; font-weight: 700; }
+    .section-title {
+      margin: 18px 0 10px;
+      font-size: 18px;
+      color: var(--accent);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #edf2f7;
+      vertical-align: top;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      background: #f8fbfe;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    tr:last-child td { border-bottom: 0; }
+    .warn {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #fff8ef;
+      border: 1px solid #f2d3ad;
+      color: var(--warn);
+      display: none;
+    }
+    .ok {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #effaf5;
+      border: 1px solid #b8e2d0;
+      color: var(--good);
+      display: none;
+    }
+    .muted { color: var(--muted); }
+    .empty {
+      padding: 18px;
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      background: #fbfdff;
+      color: var(--muted);
+    }
+    .footnote {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #cdd8e3;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>TRU PGWP-Eligible Program Fee Calculator</h1>
+      <p class="sub">Search a program, select it, and the page will show the mapped tuition structure. For course-planner programs, you can model semester-by-semester fees using the rules you defined.</p>
+      <div class="controls">
+        <div>
+          <label for="programSearch">Program</label>
+          <input id="programSearch" type="text" placeholder="Start typing a program name" autocomplete="off" />
+          <div class="hint">Only PGWP-eligible programs from the TRU international programs page are included.</div>
+          <div id="suggestions" class="suggestions"></div>
+        </div>
+        <div>
+          <label for="currencySelect">Currency</label>
+          <select id="currencySelect">
+            <option value="CAD">CAD</option>
+            <option value="INR">INR</option>
+            <option value="BDT">BDT</option>
+            <option value="NPR">NPR</option>
+            <option value="LKR">LKR</option>
+            <option value="PKR">PKR</option>
+          </select>
+          <div class="hint" id="fxHint"><span class="spinner"></span>Loading exchange rates…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div id="programSummary" class="empty">Select a program to view the fee details.</div>
+      </div>
+
+      <div class="card">
+        <div id="plannerArea" class="empty">The semester planner will appear here for course-based programs.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const COURSE_FEE_DEFAULT = 2623;
+    let programs = [];
+    let selectedProgram = null;
+    let fxRates = { CAD: 1, INR: 61, BDT: 85, NPR: 95, LKR: 330, PKR: 205 };
+
+    const programSearch = document.getElementById('programSearch');
+    const suggestions = document.getElementById('suggestions');
+    const summary = document.getElementById('programSummary');
+    const plannerArea = document.getElementById('plannerArea');
+    const currencySelect = document.getElementById('currencySelect');
+    const fxHint = document.getElementById('fxHint');
+
+    function safeNum(v) {
+      if (v === null || v === undefined || v === '') return null;
+      const n = Number(v);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function inferYears(durationText) {
+      const text = (durationText || '').toLowerCase();
+      if (!text) return null;
+      if (text.includes('16 continuous months')) return 1.33;
+      const yrMatch = text.match(/(\d+(?:\.\d+)?)\s*years?/);
+      if (yrMatch) return parseFloat(yrMatch[1]);
+      if (text.includes('18 months') || text.includes('1.5 years')) return 1.5;
+      if (text.includes('4 semesters')) return 2;
+      if (text.includes('6 semesters')) return 3;
+      if (text.includes('3 semesters')) return 1.5;
+      return null;
+    }
+
+    function formatMoney(cadAmount) {
+      const currency = currencySelect.value;
+      const amount = safeNum(cadAmount);
+      if (amount === null) return 'Not mapped yet';
+      const rate = fxRates[currency] || 1;
+      const converted = amount * rate;
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency,
+        maximumFractionDigits: 0
+      }).format(converted);
+    }
+
+    function normalized(str) {
+      return (str || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    }
+
+    function showSuggestions(list) {
+      if (!list.length) {
+        suggestions.style.display = 'none';
+        suggestions.innerHTML = '';
+        return;
+      }
+      suggestions.innerHTML = list.map((p, idx) => `
+        <div class="suggestion" data-idx="${idx}">
+          <div class="suggestion-title">${p.program_name}</div>
+          <div class="suggestion-meta">${p.category} · ${p.duration_text || 'Duration on request'} · ${p.planner_type === 'course_planner' ? 'Course planner' : 'Fixed structure'}</div>
+        </div>
+      `).join('');
+      suggestions.style.display = 'block';
+      [...suggestions.querySelectorAll('.suggestion')].forEach((node, i) => {
+        node.addEventListener('click', () => selectProgram(list[i]));
+      });
+    }
+
+    function filterPrograms(query) {
+      const q = normalized(query);
+      if (!q) {
+        showSuggestions(programs.slice(0, 10));
+        return;
+      }
+      const ranked = programs
+        .map(p => {
+          const name = normalized(p.program_name);
+          let score = 0;
+          if (name.startsWith(q)) score += 100;
+          if (name.includes(q)) score += 50;
+          const words = q.split(' ');
+          score += words.filter(w => name.includes(w)).length * 10;
+          return { p, score };
+        })
+        .filter(x => x.score > 0)
+        .sort((a, b) => b.score - a.score || a.p.program_name.localeCompare(b.p.program_name))
+        .slice(0, 12)
+        .map(x => x.p);
+      showSuggestions(ranked);
+    }
+
+    function buildSummary(program) {
+      const totalCourses = safeNum(program.total_courses);
+      const totalTuition = safeNum(program.total_tuition_cad);
+      const courseFee = safeNum(program.course_fee_cad);
+      const pills = [
+        `<span class="pill">${program.category}</span>`,
+        `<span class="pill">PGWP Eligible</span>`,
+        `<span class="pill">${program.planner_type === 'course_planner' ? 'Course Planner' : 'Fixed Structure'}</span>`
+      ].join(' ');
+
+      const notes = program.notes ? `<div class="footnote">${program.notes}</div>` : '';
+
+      summary.innerHTML = `
+        <div>
+          <h2 style="margin:0 0 6px; color: var(--accent);">${program.program_name}</h2>
+          <div>${pills}</div>
+          <div class="stats">
+            <div class="stat">
+              <div class="k">Duration</div>
+              <div class="v" style="font-size:20px;">${program.duration_text || '—'}</div>
+            </div>
+            <div class="stat">
+              <div class="k">Fee model</div>
+              <div class="v" style="font-size:20px;">${program.fee_model || '—'}</div>
+            </div>
+            <div class="stat">
+              <div class="k">Total courses</div>
+              <div class="v">${totalCourses !== null ? totalCourses : '—'}</div>
+            </div>
+            <div class="stat">
+              <div class="k">Mapped total tuition</div>
+              <div class="v" style="font-size:20px;">${totalTuition !== null ? formatMoney(totalTuition) : 'Not mapped yet'}</div>
+            </div>
+          </div>
+          <div class="section-title">Fee details</div>
+          <table>
+            <tr><th>Item</th><th>Value</th></tr>
+            <tr><td>Course fee</td><td>${courseFee !== null ? formatMoney(courseFee) : 'Not mapped yet'}</td></tr>
+            <tr><td>Total tuition (CAD source)</td><td>${totalTuition !== null ? new Intl.NumberFormat('en-CA', {style:'currency', currency:'CAD', maximumFractionDigits:0}).format(totalTuition) : 'Not mapped yet'}</td></tr>
+            <tr><td>Planner type</td><td>${program.planner_type}</td></tr>
+            <tr><td>Source status</td><td>${program.pgwp_eligible ? 'Included from PGWP-eligible list' : 'Excluded'}</td></tr>
+          </table>
+          ${notes}
+        </div>
+      `;
+    }
+
+    function buildFixed(program) {
+      const totalTuition = safeNum(program.total_tuition_cad);
+      plannerArea.innerHTML = `
+        <div>
+          <h2 style="margin:0 0 8px; color: var(--accent);">Fixed program structure</h2>
+          <div class="empty" style="margin-bottom: 14px;">
+            This program is stored as a fixed-structure row. The semester course selector is not shown for this program.
+          </div>
+          <table>
+            <tr><th>Field</th><th>Value</th></tr>
+            <tr><td>Program</td><td>${program.program_name}</td></tr>
+            <tr><td>Duration</td><td>${program.duration_text || '—'}</td></tr>
+            <tr><td>Mapped total tuition</td><td>${totalTuition !== null ? formatMoney(totalTuition) : 'Not mapped yet'}</td></tr>
+            <tr><td>Notes</td><td>${program.notes || '—'}</td></tr>
+          </table>
+        </div>
+      `;
+    }
+
+    function deriveSemesters(program) {
+      const years = inferYears(program.duration_text);
+      const totalCourses = safeNum(program.total_courses);
+      if (!years || !totalCourses) return null;
+      const mainSemesters = Math.round(years * 2);
+      const maySemesters = Math.floor(years);
+      const semesters = [];
+      for (let y = 1; y <= Math.ceil(years); y++) {
+        if ((y * 2 - 1) <= mainSemesters) semesters.push({ label: `Fall Year ${y}`, type: 'main', min: y === 1 ? 4 : 3, max: y === 1 ? 4 : 5, value: y === 1 ? 4 : 3 });
+        if ((y * 2) <= mainSemesters) semesters.push({ label: `Winter Year ${y}`, type: 'main', min: 3, max: 5, value: 3 });
+        if (y <= maySemesters) semesters.push({ label: `May Year ${y}`, type: 'may', min: 0, max: 2, value: 0 });
+      }
+      return { years, mainSemesters, maySemesters, totalCourses, semesters };
+    }
+
+    function buildPlanner(program) {
+      const cfg = deriveSemesters(program);
+      const courseFee = safeNum(program.course_fee_cad) || COURSE_FEE_DEFAULT;
+      const totalTuition = safeNum(program.total_tuition_cad);
+      if (!cfg) {
+        plannerArea.innerHTML = `<div class="empty">This row does not yet have enough mapped data to build the semester planner.</div>`;
+        return;
+      }
+      plannerArea.innerHTML = `
+        <div>
+          <h2 style="margin:0 0 8px; color: var(--accent);">Semester planner</h2>
+          <div class="hint" style="margin-bottom:12px;">Semester 1 is locked at 4 courses. Main semesters are 3–5 courses. May semester is optional and capped at 2 courses. No extension beyond the official duration is assumed.</div>
+          <div class="stats">
+            <div class="stat"><div class="k">Main semesters</div><div class="v">${cfg.mainSemesters}</div></div>
+            <div class="stat"><div class="k">Optional May semesters</div><div class="v">${cfg.maySemesters}</div></div>
+            <div class="stat"><div class="k">Selected courses</div><div class="v" id="selectedCoursesStat">0</div></div>
+            <div class="stat"><div class="k">Remaining courses</div><div class="v" id="remainingCoursesStat">${cfg.totalCourses}</div></div>
+          </div>
+          <div class="section-title">Plan your semesters</div>
+          <table>
+            <thead>
+              <tr><th>Semester</th><th>Allowed</th><th>Courses</th><th>Semester fee</th></tr>
+            </thead>
+            <tbody>
+              ${cfg.semesters.map((s, i) => `
+                <tr>
+                  <td>${s.label}</td>
+                  <td>${s.min}–${s.max}</td>
+                  <td>
+                    <select class="sem-select" data-idx="${i}">
+                      ${Array.from({ length: s.max - s.min + 1 }, (_, k) => s.min + k).map(v => `<option value="${v}" ${v === s.value ? 'selected' : ''}>${v}</option>`).join('')}
+                    </select>
+                  </td>
+                  <td class="sem-fee" data-idx="${i}">${formatMoney(s.value * courseFee)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <div class="section-title">Totals</div>
+          <table>
+            <tr><th>Item</th><th>Value</th></tr>
+            <tr><td>Year 1 estimated tuition</td><td id="year1Total">—</td></tr>
+            <tr><td>Estimated total based on selected plan</td><td id="selectedTotal">—</td></tr>
+            <tr><td>Mapped official total tuition</td><td>${totalTuition !== null ? formatMoney(totalTuition) : 'Not mapped yet'}</td></tr>
+          </table>
+          <div id="plannerWarn" class="warn"></div>
+          <div id="plannerOk" class="ok"></div>
+        </div>
+      `;
+
+      [...plannerArea.querySelectorAll('.sem-select')].forEach(sel => {
+        sel.addEventListener('change', () => refreshPlanner(program));
+      });
+      refreshPlanner(program);
+    }
+
+    function refreshPlanner(program) {
+      const cfg = deriveSemesters(program);
+      const courseFee = safeNum(program.course_fee_cad) || COURSE_FEE_DEFAULT;
+      const selects = [...plannerArea.querySelectorAll('.sem-select')];
+      let selectedCourses = 0;
+      let year1TotalCad = 0;
+      let selectedTotalCad = 0;
+      selects.forEach((sel, i) => {
+        const value = Number(sel.value);
+        selectedCourses += value;
+        selectedTotalCad += value * courseFee;
+        if (i < 3) year1TotalCad += value * courseFee;
+        const feeCell = plannerArea.querySelector(`.sem-fee[data-idx="${i}"]`);
+        if (feeCell) feeCell.textContent = formatMoney(value * courseFee);
+      });
+      const remaining = cfg.totalCourses - selectedCourses;
+      const remainingMain = cfg.semesters
+        .filter((s, i) => s.type === 'main' && Number(selects[i].value) < s.max)
+        .reduce((acc, s, i) => acc + (s.max - Number(selects[cfg.semesters.indexOf(s)].value)), 0);
+      const remainingMay = cfg.semesters
+        .filter((s, i) => s.type === 'may' && Number(selects[i].value) < s.max)
+        .reduce((acc, s, i) => acc + (s.max - Number(selects[cfg.semesters.indexOf(s)].value)), 0);
+      const remainingCapacity = remainingMain + remainingMay;
+
+      plannerArea.querySelector('#selectedCoursesStat').textContent = selectedCourses;
+      plannerArea.querySelector('#remainingCoursesStat').textContent = remaining;
+      plannerArea.querySelector('#year1Total').textContent = formatMoney(year1TotalCad);
+      plannerArea.querySelector('#selectedTotal').textContent = formatMoney(selectedTotalCad);
+
+      const warn = plannerArea.querySelector('#plannerWarn');
+      const ok = plannerArea.querySelector('#plannerOk');
+      warn.style.display = 'none';
+      ok.style.display = 'none';
+
+      if (remaining > 0 && remaining > remainingCapacity) {
+        warn.textContent = `You have ${remaining} courses remaining, but the unused capacity across the remaining official semesters is only ${remainingCapacity}. This plan will not complete the program within the official duration.`;
+        warn.style.display = 'block';
+      } else if (remaining > 0) {
+        ok.textContent = `This plan is still workable. ${remaining} course(s) remain to be distributed across the remaining official semesters.`;
+        ok.style.display = 'block';
+      } else if (remaining === 0) {
+        ok.textContent = 'This plan reaches the full course requirement within the official duration.';
+        ok.style.display = 'block';
+      } else {
+        warn.textContent = `This plan exceeds the required course count by ${Math.abs(remaining)} course(s). Reduce one or more semesters.`;
+        warn.style.display = 'block';
+      }
+    }
+
+    function selectProgram(program) {
+      selectedProgram = program;
+      programSearch.value = program.program_name;
+      suggestions.style.display = 'none';
+      buildSummary(program);
+      if (program.planner_type === 'course_planner') {
+        buildPlanner(program);
+      } else {
+        buildFixed(program);
+      }
+    }
+
+    async function loadFx() {
+      try {
+        const res = await fetch('https://open.er-api.com/v6/latest/CAD');
+        const data = await res.json();
+        if (data && data.rates) {
+          ['CAD', 'INR', 'BDT', 'NPR', 'LKR', 'PKR'].forEach(c => {
+            if (data.rates[c]) fxRates[c] = data.rates[c];
+          });
+          fxHint.textContent = 'Live exchange rates loaded from CAD base.';
+        } else {
+          fxHint.textContent = 'Using built-in exchange rates.';
+        }
+      } catch (e) {
+        fxHint.textContent = 'Using built-in exchange rates.';
+      }
+    }
+
+    async function loadPrograms() {
+      try {
+        const res = await fetch('tru_pgwp_programs_master.json');
+        programs = await res.json();
+        programs = programs.filter(p => p.pgwp_eligible).sort((a, b) => a.program_name.localeCompare(b.program_name));
+        filterPrograms('');
+      } catch (e) {
+        summary.innerHTML = `<div class="empty">The JSON file could not be loaded. Keep <strong>tru_pgwp_calculator.html</strong> and <strong>tru_pgwp_programs_master.json</strong> in the same folder when you host the page.</div>`;
+      }
+    }
+
+    programSearch.addEventListener('input', (e) => filterPrograms(e.target.value));
+    programSearch.addEventListener('focus', () => filterPrograms(programSearch.value));
+    document.addEventListener('click', (e) => {
+      if (!suggestions.contains(e.target) && e.target !== programSearch) suggestions.style.display = 'none';
+    });
+    currencySelect.addEventListener('change', () => {
+      if (selectedProgram) selectProgram(selectedProgram);
+    });
+
+    loadFx();
+    loadPrograms();
+  </script>
+</body>
+</html>

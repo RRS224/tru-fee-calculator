@@ -1,0 +1,54 @@
+program_name,category,pgwp_eligible,duration_text,fee_model,total_courses,total_tuition_cad,course_fee_cad,fixed_pattern,planner_type,notes
+Law – Juris Doctor,Doctoral/Professional,True,3 years,jd_fixed,,,,True,fixed,PGWP-eligible professional degree
+Master of Arts in Human Rights and Social Justice,Graduate,True,16 continuous months (4 semesters),grad_flat,,,,True,fixed,Fixed graduate tuition
+Master of Business Administration,Graduate,True,2 years,grad_flat,,,,True,fixed,MBA fixed graduate tuition
+Master of Science in Data Science,Graduate,True,2 years,grad_flat,,,,True,fixed,Fixed graduate tuition
+Master of Engineering Science (Software Engineering),Graduate,True,2 years,grad_flat,,,,True,fixed,Fixed graduate tuition
+Master of Education,Graduate,True,1.5 to 2 years,grad_flat,,,,True,fixed,Fixed graduate tuition
+Graduate Certificate in Educational Studies (Pre-M.Ed.),Graduate,True,1.5 to 2 years,grad_flat,,,,True,fixed,Fixed graduate tuition
+Master in Environmental Economics and Management,Graduate,True,1 year,grad_flat,,,,True,fixed,Use official TRU structure
+Master of Science in Environmental Science,Graduate,True,2-3 years,grad_flat,,,,True,fixed,Fixed graduate tuition
+Master of Science in Environmental Economics and Management (MScEEM),Graduate,True,1.5–2 years,grad_flat,,,,True,fixed,Fixed graduate tuition
+Post-Baccalaureate Diploma in Supply Chain Management,Post-Baccalaureate Diploma,True,2 years,pbd_standard,20,52476,2623,False,course_planner,Standard PBD fee bucket
+Post-Baccalaureate Diploma in Mathematics and Economics,Post-Baccalaureate Diploma,True,2 years,pbd_standard,20,52476,2623,False,course_planner,Standard PBD fee bucket
+Post-Baccalaureate Diploma in Applied Data Science,Post-Baccalaureate Diploma,True,2 years,pbd_standard,20,52476,2623,False,course_planner,Standard PBD fee bucket
+Bachelor of Arts,Bachelor,True,4 years,bachelor_standard,40,104952,2623,False,course_planner,PGWP-eligible family row
+Bachelor of Business Administration,Bachelor,True,4 years,bachelor_standard,40,104952,2623,False,course_planner,PGWP-eligible family row
+Bachelor of Business Administration & Bachelor of Arts,Bachelor,True,5 years,double_degree_50,50,,2623,False,course_planner,50-course double degree
+Bachelor of Business Administration and Bachelor of Computing Science,Bachelor,True,5 years,double_degree_50,50,,2623,False,course_planner,50-course double degree
+Bachelor of Computing Science,Bachelor,True,4 years,bachelor_standard,40,104952,2623,False,course_planner,Standard bachelor bucket
+Bachelor of Communication and Digital Journalism,Bachelor,True,4 years,bachelor_standard,40,104952,2623,False,course_planner,PGWP-eligible family row
+Bachelor of Education (Elementary),Bachelor,True,5 years,bed_elementary_custom,50,,2623,False,course_planner,Treat as custom 50-course path
+"Bachelor of Education (Secondary) Science, Technology, Engineering, & Mathematics (STEM)",Bachelor,True,custom,bed_secondary_custom,,,,False,course_planner,Needs custom duration/path handling
+Bachelor of Engineering in Computer Engineering,Bachelor,True,5 years,beng_computer,50,133814,2623,False,course_planner,Named exception on fees page
+Bachelor of Engineering in Software Engineering,Bachelor,True,5 years,beng_software,50,133813,2623,False,course_planner,Named exception on fees page
+Bachelor of Interdisciplinary Studies (3rd year entry),Bachelor,True,2 years,bis_3rd_year_entry,20,,2623,False,course_planner,60-credit entry route
+Bachelor of Natural Resource Science,Bachelor,True,4 years,bachelor_standard,40,104952,2623,False,course_planner,Standard bachelor bucket
+Bachelor of Science,Bachelor,True,4 years,bachelor_standard,40,104952,2623,False,course_planner,PGWP-eligible family row
+Bachelor of Science in Nursing,Bachelor,True,4 years,bachelor_standard,40,104952,2623,False,course_planner,Standard bachelor bucket
+Bachelor of Social Work,Bachelor,True,4 years,bachelor_standard,40,104952,2623,False,course_planner,Standard bachelor bucket
+Bachelor of Tourism Management,Bachelor,True,4 years,bachelor_standard,40,104952,2623,False,course_planner,PGWP-eligible family row
+Engineering – First & second year transfer to UBC and UVic,Transfer,True,1 year,engineering_transfer,12,31486,2623,False,course_planner,Named exception on fees page
+Architectural and Engineering Technology (ARET) Diploma,Diploma,True,2 years,aret_diploma,22,69968,2623,False,course_planner,Named exception on fees page
+Regenerative Agriculture Diploma,Diploma,True,2 years,regen_ag_diploma,21,55100,2623,False,course_planner,Named exception on fees page
+Computer Network and Cybersecurity Diploma,Diploma,True,2 years,diploma_standard,20,52476,2623,False,course_planner,Standard diploma bucket
+Computing Science Diploma,Diploma,True,2 years,diploma_standard,20,52476,2623,False,course_planner,Standard diploma bucket
+Early Childhood Education Diploma,Diploma,True,1.5 years,diploma_standard,20,52476,2623,False,course_planner,Duration differs from standard bucket
+Horticulture Management Diploma,Diploma,True,2 years,horticulture_diploma,24,50727,2623,False,course_planner,Named exception on fees page
+Human Service Diploma,Diploma,True,2 years,diploma_standard,20,52476,2623,False,course_planner,Standard diploma bucket
+Power Engineering Technology Diploma,Diploma,True,2 years,diploma_standard,20,52476,2623,False,course_planner,Standard diploma bucket
+Practical Nursing Diploma,Diploma,True,custom,diploma_custom,,,,False,course_planner,Keep as custom row until exact tuition mapping is confirmed
+Respiratory Therapy Diploma,Diploma,True,3 years,diploma_custom,,,,False,course_planner,Keep as custom row until exact tuition mapping is confirmed
+Wildfire Studies Diploma,Diploma,True,2 years,diploma_standard,20,52476,2623,False,course_planner,Standard diploma bucket
+Culinary Arts: Professional Cook 1 Certificate,Certificate,True,1 year,certificate_standard,10,26238,2623,False,course_planner,Standard certificate bucket
+Health Care Assistant Certificate,Certificate,True,8 months,certificate_custom,,,,False,course_planner,Keep as custom row until exact tuition mapping is confirmed
+Horticulture Certificate,Certificate,True,8 months,certificate_custom,,,,False,course_planner,Keep as custom row until exact tuition mapping is confirmed
+Regenerative Agriculture Certificate,Certificate,True,1 year,certificate_standard,10,26238,2623,False,course_planner,Standard certificate bucket
+Electrician,Trades Foundation,True,weeks,trades_excluded_from_guaranteed_model,,,,True,fixed,PGWP-marked but outside course-per-semester model
+Heavy Mechanical,Trades Foundation,True,weeks,trades_excluded_from_guaranteed_model,,,,True,fixed,PGWP-marked but outside course-per-semester model
+Industrial Mechanic (Millwright),Trades Foundation,True,weeks,trades_excluded_from_guaranteed_model,,,,True,fixed,PGWP-marked but outside course-per-semester model
+Meatcutter,Trades Foundation,True,weeks,trades_excluded_from_guaranteed_model,,,,True,fixed,PGWP-marked but outside course-per-semester model
+Power Engineering (Fourth Class),Trades Foundation,True,weeks,trades_excluded_from_guaranteed_model,,,,True,fixed,PGWP-marked but outside course-per-semester model
+Refrigeration and Air Conditioning Mechanic,Trades Foundation,True,weeks,trades_excluded_from_guaranteed_model,,,,True,fixed,PGWP-marked but outside course-per-semester model
+Residential Construction (Carpenter),Trades Foundation,True,weeks,trades_excluded_from_guaranteed_model,,,,True,fixed,PGWP-marked but outside course-per-semester model
+Welding,Trades Foundation,True,weeks,trades_excluded_from_guaranteed_model,,,,True,fixed,PGWP-marked but outside course-per-semester model
