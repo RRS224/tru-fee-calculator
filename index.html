@@ -5,204 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TRU PGWP-Eligible Program Fee Calculator</title>
   <style>
-    :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --ink: #17324d;
-      --muted: #5a6b7b;
-      --line: #d9e2ec;
-      --accent: #005691;
-      --accent-2: #0a7cc2;
-      --warn: #b55d00;
-      --good: #0a7f55;
-      --soft: #eef5fb;
+    :root{
+      --bg:#f3f7fb;
+      --card:#ffffff;
+      --ink:#14324b;
+      --muted:#5d7388;
+      --line:#d8e3ec;
+      --accent:#00558c;
+      --accent2:#0e7ac4;
+      --soft:#edf6fd;
+      --soft2:#f8fbfe;
+      --okbg:#edf9f2;
+      --ok:#0b7d52;
+      --warnbg:#fff7ec;
+      --warn:#a45c00;
+      --shadow:0 10px 30px rgba(20,50,75,.08);
+      --radius:20px;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      line-height: 1.45;
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f7fbff 0%,#eef4f9 100%);color:var(--ink);line-height:1.45}
+    .wrap{max-width:1240px;margin:0 auto;padding:24px}
+    .hero{background:linear-gradient(135deg,#fff 0%,#eef6fd 100%);border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:var(--shadow);margin-bottom:20px}
+    h1{margin:0 0 8px;font-size:clamp(28px,3vw,42px);letter-spacing:-.02em;color:var(--accent)}
+    .sub{margin:0;color:var(--muted);font-size:16px;max-width:950px}
+    .topbar{display:grid;grid-template-columns:1.2fr 180px;gap:14px;margin-top:22px;align-items:start}
+    label{display:block;font-size:13px;font-weight:700;margin:0 0 7px;color:var(--ink)}
+    input,select{width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--line);font-size:16px;color:var(--ink);background:#fff;outline:none;transition:.2s border,.2s box-shadow}
+    input:focus,select:focus{border-color:#8ab9df;box-shadow:0 0 0 4px rgba(14,122,196,.08)}
+    .hint{margin-top:8px;font-size:12px;color:var(--muted)}
+    .searchWrap{position:relative}
+    .suggestions{position:absolute;left:0;right:0;top:100%;margin-top:8px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;display:none;z-index:50;max-height:360px;overflow-y:auto}
+    .suggestion{padding:13px 16px;border-bottom:1px solid #edf2f7;cursor:pointer}
+    .suggestion:last-child{border-bottom:0}
+    .suggestion:hover{background:var(--soft)}
+    .s-title{font-weight:700;font-size:15px}
+    .s-meta{font-size:12px;color:var(--muted);margin-top:3px}
+    .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:start}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow)}
+    .empty{padding:22px;border:1px dashed var(--line);border-radius:18px;background:var(--soft2);color:var(--muted)}
+    .program-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap}
+    .program-title{font-size:clamp(28px,2.2vw,38px);line-height:1.1;margin:0;color:var(--accent)}
+    .chips{margin-top:10px}
+    .chip{display:inline-block;padding:7px 11px;border-radius:999px;background:var(--soft);color:var(--accent);font-weight:700;font-size:12px;margin:0 8px 8px 0}
+    .hero-total{min-width:240px;background:linear-gradient(135deg,#f8fcff 0%,#edf7fe 100%);border:1px solid var(--line);border-radius:18px;padding:18px}
+    .hero-total .k{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .hero-total .v{font-size:30px;font-weight:800;color:var(--accent);line-height:1.05}
+    .hero-total .s{font-size:12px;color:var(--muted);margin-top:6px}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+    .stat{border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff}
+    .stat .k{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .stat .v{font-size:23px;font-weight:800;line-height:1.1}
+    .section{margin-top:20px}
+    .section h2{font-size:21px;margin:0 0 12px;color:var(--accent)}
+    table{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+    th,td{padding:12px 12px;border-bottom:1px solid #edf2f7;text-align:left;font-size:14px;vertical-align:top}
+    th{background:#f8fbfe;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    tr:last-child td{border-bottom:0}
+    .planner-note{padding:14px 16px;border-radius:16px;background:var(--soft2);border:1px solid var(--line);color:var(--muted);margin-bottom:14px}
+    .feedback{display:none;padding:13px 14px;border-radius:14px;margin-top:14px}
+    .feedback.ok{background:var(--okbg);border:1px solid #b5e2ce;color:var(--ok)}
+    .feedback.warn{background:var(--warnbg);border:1px solid #f1d4a5;color:var(--warn)}
+    .side-block{border:1px solid var(--line);border-radius:18px;padding:18px;background:linear-gradient(135deg,#fff 0%,#f8fbfe 100%);margin-bottom:14px}
+    .side-block h3{margin:0 0 10px;color:var(--accent);font-size:18px}
+    .mini-list{margin:0;padding-left:18px;color:var(--muted)}
+    .mini-list li{margin:0 0 8px}
+    .muted{color:var(--muted)}
+    .footnote{font-size:12px;color:var(--muted);margin-top:12px}
+    .currency-note{font-size:12px;color:var(--muted);margin-top:8px}
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .topbar{grid-template-columns:1fr}
+      .hero-total{width:100%}
     }
-    .wrap {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-    .hero {
-      background: linear-gradient(135deg, #ffffff 0%, #eef5fb 100%);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(23, 50, 77, 0.06);
-      margin-bottom: 20px;
-    }
-    h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-      color: var(--accent);
-    }
-    .sub {
-      color: var(--muted);
-      margin: 0;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 20px;
-      align-items: start;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 8px 24px rgba(23, 50, 77, 0.05);
-    }
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr 200px;
-      gap: 12px;
-      margin-top: 18px;
-    }
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      margin: 0 0 6px;
-      color: var(--ink);
-    }
-    input, select {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      font-size: 15px;
-      color: var(--ink);
-      background: #fff;
-    }
-    .hint {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 6px;
-    }
-    .suggestions {
-      margin-top: 8px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #fff;
-      overflow: hidden;
-      max-height: 320px;
-      overflow-y: auto;
-      display: none;
-    }
-    .suggestion {
-      padding: 12px 14px;
-      border-bottom: 1px solid #edf2f7;
-      cursor: pointer;
-    }
-    .suggestion:last-child { border-bottom: 0; }
-    .suggestion:hover { background: var(--soft); }
-    .suggestion-title { font-weight: 700; }
-    .suggestion-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .pill {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: var(--soft);
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 700;
-      margin: 0 6px 6px 0;
-    }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-    .stat {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      background: #fff;
-    }
-    .stat .k { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-    .stat .v { font-size: 22px; font-weight: 700; }
-    .section-title {
-      margin: 18px 0 10px;
-      font-size: 18px;
-      color: var(--accent);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid var(--line);
-    }
-    th, td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #edf2f7;
-      vertical-align: top;
-      text-align: left;
-      font-size: 14px;
-    }
-    th {
-      background: #f8fbfe;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    tr:last-child td { border-bottom: 0; }
-    .warn {
-      margin-top: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: #fff8ef;
-      border: 1px solid #f2d3ad;
-      color: var(--warn);
-      display: none;
-    }
-    .ok {
-      margin-top: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: #effaf5;
-      border: 1px solid #b8e2d0;
-      color: var(--good);
-      display: none;
-    }
-    .muted { color: var(--muted); }
-    .empty {
-      padding: 18px;
-      border: 1px dashed var(--line);
-      border-radius: 14px;
-      background: #fbfdff;
-      color: var(--muted);
-    }
-    .footnote {
-      margin-top: 14px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .spinner {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid #cdd8e3;
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
-      .controls { grid-template-columns: 1fr; }
-      .stats { grid-template-columns: 1fr; }
+    @media (max-width: 620px){
+      .wrap{padding:16px}
+      .hero,.card{padding:18px}
+      .stats{grid-template-columns:1fr}
+      .program-title{font-size:30px}
+      .hero-total .v{font-size:28px}
     }
   </style>
 </head>
@@ -210,13 +91,15 @@
   <div class="wrap">
     <div class="hero">
       <h1>TRU PGWP-Eligible Program Fee Calculator</h1>
-      <p class="sub">Search a program, select it, and the page will show the mapped tuition structure. For course-planner programs, you can model semester-by-semester fees using the rules you defined.</p>
-      <div class="controls">
+      <p class="sub">Start typing a program name or short form such as MBA, BBA, BSc, BA, BEd or BEng. Select the program and the page will show the mapped tuition structure. For course-planner programs, you can model semester-by-semester tuition using your approved course-load rules.</p>
+      <div class="topbar">
         <div>
           <label for="programSearch">Program</label>
-          <input id="programSearch" type="text" placeholder="Start typing a program name" autocomplete="off" />
+          <div class="searchWrap">
+            <input id="programSearch" type="text" placeholder="Try MBA, BBA, Nursing, Data Science, Engineering…" autocomplete="off" />
+            <div id="suggestions" class="suggestions"></div>
+          </div>
           <div class="hint">Only PGWP-eligible programs from the TRU international programs page are included.</div>
-          <div id="suggestions" class="suggestions"></div>
         </div>
         <div>
           <label for="currencySelect">Currency</label>
@@ -228,24 +111,61 @@
             <option value="LKR">LKR</option>
             <option value="PKR">PKR</option>
           </select>
-          <div class="hint" id="fxHint"><span class="spinner"></span>Loading exchange rates…</div>
+          <div id="fxHint" class="currency-note">Loading exchange rates…</div>
         </div>
       </div>
     </div>
 
     <div class="grid">
-      <div class="card">
-        <div id="programSummary" class="empty">Select a program to view the fee details.</div>
+      <div class="card" id="programSummary">
+        <div class="empty">Select a program to view the mapped fee details.</div>
       </div>
 
-      <div class="card">
-        <div id="plannerArea" class="empty">The semester planner will appear here for course-based programs.</div>
+      <div class="card" id="plannerArea">
+        <div class="empty">The tuition planner or fixed program summary will appear here once a program is selected.</div>
       </div>
     </div>
   </div>
 
   <script>
     const COURSE_FEE_DEFAULT = 2623;
+    const FIXED_TOTALS = {
+      'Graduate Certificate in Educational Studies (Pre-M.Ed.)': 11302,
+      'Master of Education': 37673,
+      'Master of Arts in Human Rights and Social Justice': 37673,
+      'Master of Business Administration': 57235,
+      'Master in Environmental Economics and Management': 39149,
+      'Master of Engineering Science (Software Engineering)': 46235,
+      'Master of Science in Data Science': 51186,
+      'Master of Science in Environmental Science': 44990,
+      'Master of Science in Environmental Economics and Management (MScEEM)': 40132
+    };
+
+    const MANUAL_ALIASES = {
+      'Master of Business Administration': ['mba'],
+      'Bachelor of Business Administration': ['bba'],
+      'Bachelor of Science': ['bsc'],
+      'Bachelor of Arts': ['ba'],
+      'Bachelor of Education (Elementary)': ['bed elementary', 'bed'],
+      'Bachelor of Education (Secondary) Science, Technology, Engineering, & Mathematics (STEM)': ['bed stem', 'bed secondary'],
+      'Bachelor of Engineering in Computer Engineering': ['beng computer', 'computer engineering'],
+      'Bachelor of Engineering in Software Engineering': ['beng software', 'software engineering'],
+      'Bachelor of Science in Nursing': ['bsn', 'nursing'],
+      'Master of Science in Data Science': ['ms data science', 'data science'],
+      'Master of Arts in Human Rights and Social Justice': ['ma hrsj', 'human rights'],
+      'Law – Juris Doctor': ['jd', 'law'],
+      'Master of Education': ['med', 'm ed'],
+      'Bachelor of Computing Science': ['bcs', 'computing science'],
+      'Bachelor of Communication and Digital Journalism': ['bcdj', 'journalism'],
+      'Bachelor of Tourism Management': ['btm', 'tourism management'],
+      'Master in Environmental Economics and Management': ['meem'],
+      'Master of Science in Environmental Economics and Management (MScEEM)': ['msceem'],
+      'Master of Science in Environmental Science': ['environmental science'],
+      'Post-Baccalaureate Diploma in Applied Data Science': ['pbd applied data science', 'pbd data science'],
+      'Post-Baccalaureate Diploma in Supply Chain Management': ['pbd scm', 'pb supply chain', 'supply chain'],
+      'Post-Baccalaureate Diploma in Mathematics and Economics': ['pbd math economics']
+    };
+
     let programs = [];
     let selectedProgram = null;
     let fxRates = { CAD: 1, INR: 61, BDT: 85, NPR: 95, LKR: 330, PKR: 205 };
@@ -263,6 +183,33 @@
       return Number.isFinite(n) ? n : null;
     }
 
+    function normalized(str) {
+      return (str || '')
+        .toLowerCase()
+        .replace(/&/g, ' and ')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+    }
+
+    function formatMoney(cadAmount) {
+      const amount = safeNum(cadAmount);
+      if (amount === null) return 'Not mapped yet';
+      const currency = currencySelect.value;
+      const rate = fxRates[currency] || 1;
+      const converted = amount * rate;
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency,
+        maximumFractionDigits: 0
+      }).format(converted);
+    }
+
+    function formatCad(cadAmount) {
+      const amount = safeNum(cadAmount);
+      if (amount === null) return 'Not mapped yet';
+      return new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 }).format(amount);
+    }
+
     function inferYears(durationText) {
       const text = (durationText || '').toLowerCase();
       if (!text) return null;
@@ -276,21 +223,63 @@
       return null;
     }
 
-    function formatMoney(cadAmount) {
-      const currency = currencySelect.value;
-      const amount = safeNum(cadAmount);
-      if (amount === null) return 'Not mapped yet';
-      const rate = fxRates[currency] || 1;
-      const converted = amount * rate;
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency,
-        maximumFractionDigits: 0
-      }).format(converted);
+    function buildAliases(program) {
+      const name = program.program_name;
+      const clean = normalized(name);
+      const aliases = new Set([clean]);
+      const words = clean.split(' ').filter(Boolean);
+      if (words.length > 1) aliases.add(words.map(w => w[0]).join(''));
+      if (name.includes('Bachelor of Business Administration')) aliases.add('bba');
+      if (name.includes('Master of Business Administration')) aliases.add('mba');
+      if (name === 'Bachelor of Arts') aliases.add('ba');
+      if (name === 'Bachelor of Science') aliases.add('bsc');
+      if (name.includes('Bachelor of Computing Science')) aliases.add('bcs');
+      if (name.includes('Bachelor of Communication and Digital Journalism')) aliases.add('bcdj');
+      if (name.includes('Bachelor of Tourism Management')) aliases.add('btm');
+      if (name.includes('Bachelor of Engineering')) aliases.add('beng');
+      if (name.includes('Bachelor of Education')) aliases.add('bed');
+      if (name.includes('Master of Education')) aliases.add('med');
+      if (MANUAL_ALIASES[name]) MANUAL_ALIASES[name].forEach(a => aliases.add(normalized(a)));
+      if (program.category) aliases.add(normalized(program.category));
+      return [...aliases];
     }
 
-    function normalized(str) {
-      return (str || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    function enrichPrograms(rows) {
+      return rows.map(row => {
+        const copy = { ...row };
+        if (!safeNum(copy.total_tuition_cad) && FIXED_TOTALS[copy.program_name]) {
+          copy.total_tuition_cad = FIXED_TOTALS[copy.program_name];
+        }
+        copy.aliases = buildAliases(copy);
+        copy.search_blob = [copy.program_name, copy.category, ...(copy.aliases || [])].map(normalized).join(' | ');
+        return copy;
+      });
+    }
+
+    function rankPrograms(query) {
+      const q = normalized(query);
+      if (!q) return programs.slice(0, 14);
+      const terms = q.split(' ').filter(Boolean);
+      return programs
+        .map(p => {
+          let score = 0;
+          const name = normalized(p.program_name);
+          const aliases = p.aliases || [];
+          if (name === q) score += 400;
+          if (aliases.includes(q)) score += 350;
+          if (name.startsWith(q)) score += 250;
+          if (aliases.some(a => a.startsWith(q))) score += 220;
+          if (name.includes(q)) score += 160;
+          if (aliases.some(a => a.includes(q))) score += 140;
+          score += terms.filter(t => name.includes(t)).length * 25;
+          score += terms.filter(t => aliases.some(a => a.includes(t))).length * 22;
+          if (p.category && normalized(p.category).includes(q)) score += 40;
+          return { p, score };
+        })
+        .filter(x => x.score > 0)
+        .sort((a, b) => b.score - a.score || a.p.program_name.localeCompare(b.p.program_name))
+        .slice(0, 12)
+        .map(x => x.p);
     }
 
     function showSuggestions(list) {
@@ -299,12 +288,15 @@
         suggestions.innerHTML = '';
         return;
       }
-      suggestions.innerHTML = list.map((p, idx) => `
-        <div class="suggestion" data-idx="${idx}">
-          <div class="suggestion-title">${p.program_name}</div>
-          <div class="suggestion-meta">${p.category} · ${p.duration_text || 'Duration on request'} · ${p.planner_type === 'course_planner' ? 'Course planner' : 'Fixed structure'}</div>
-        </div>
-      `).join('');
+      suggestions.innerHTML = list.map((p, idx) => {
+        const feeLabel = safeNum(p.total_tuition_cad) ? `Official total ${formatMoney(p.total_tuition_cad)}` : (p.planner_type === 'fixed' ? 'Fixed tuition structure' : 'Mapped course-planner row');
+        return `
+          <div class="suggestion" data-idx="${idx}">
+            <div class="s-title">${p.program_name}</div>
+            <div class="s-meta">${p.category} · ${p.duration_text || 'Duration not mapped'} · ${feeLabel}</div>
+          </div>
+        `;
+      }).join('');
       suggestions.style.display = 'block';
       [...suggestions.querySelectorAll('.suggestion')].forEach((node, i) => {
         node.addEventListener('click', () => selectProgram(list[i]));
@@ -312,90 +304,102 @@
     }
 
     function filterPrograms(query) {
-      const q = normalized(query);
-      if (!q) {
-        showSuggestions(programs.slice(0, 10));
-        return;
+      showSuggestions(rankPrograms(query));
+    }
+
+    function stat(label, value) {
+      return `<div class="stat"><div class="k">${label}</div><div class="v">${value}</div></div>`;
+    }
+
+    function yearOneEstimate(program) {
+      const totalCourses = safeNum(program.total_courses);
+      const courseFee = safeNum(program.course_fee_cad);
+      if (totalCourses !== null && courseFee !== null) {
+        if (program.category === 'Bachelor') return 10 * courseFee;
+        if (program.category.includes('Diploma')) return 10 * courseFee;
+        if (program.category === 'Certificate') return Math.min(totalCourses, 10) * courseFee;
+        if (program.category === 'Transfer') return totalCourses * courseFee;
       }
-      const ranked = programs
-        .map(p => {
-          const name = normalized(p.program_name);
-          let score = 0;
-          if (name.startsWith(q)) score += 100;
-          if (name.includes(q)) score += 50;
-          const words = q.split(' ');
-          score += words.filter(w => name.includes(w)).length * 10;
-          return { p, score };
-        })
-        .filter(x => x.score > 0)
-        .sort((a, b) => b.score - a.score || a.p.program_name.localeCompare(b.p.program_name))
-        .slice(0, 12)
-        .map(x => x.p);
-      showSuggestions(ranked);
+      if (program.program_name === 'Master of Business Administration') return 17979;
+      if (program.program_name === 'Master in Environmental Economics and Management') return 39149;
+      if (program.program_name === 'Master of Education') return 37673;
+      if (program.program_name === 'Master of Science in Data Science') return 25593;
+      return null;
     }
 
     function buildSummary(program) {
       const totalCourses = safeNum(program.total_courses);
       const totalTuition = safeNum(program.total_tuition_cad);
       const courseFee = safeNum(program.course_fee_cad);
-      const pills = [
-        `<span class="pill">${program.category}</span>`,
-        `<span class="pill">PGWP Eligible</span>`,
-        `<span class="pill">${program.planner_type === 'course_planner' ? 'Course Planner' : 'Fixed Structure'}</span>`
-      ].join(' ');
-
-      const notes = program.notes ? `<div class="footnote">${program.notes}</div>` : '';
+      const y1 = yearOneEstimate(program);
+      const heroValue = totalTuition !== null ? formatMoney(totalTuition) : (y1 !== null ? formatMoney(y1) : 'Not mapped yet');
+      const heroLabel = totalTuition !== null ? 'Official total tuition' : 'Best mapped tuition figure';
 
       summary.innerHTML = `
-        <div>
-          <h2 style="margin:0 0 6px; color: var(--accent);">${program.program_name}</h2>
-          <div>${pills}</div>
-          <div class="stats">
-            <div class="stat">
-              <div class="k">Duration</div>
-              <div class="v" style="font-size:20px;">${program.duration_text || '—'}</div>
-            </div>
-            <div class="stat">
-              <div class="k">Fee model</div>
-              <div class="v" style="font-size:20px;">${program.fee_model || '—'}</div>
-            </div>
-            <div class="stat">
-              <div class="k">Total courses</div>
-              <div class="v">${totalCourses !== null ? totalCourses : '—'}</div>
-            </div>
-            <div class="stat">
-              <div class="k">Mapped total tuition</div>
-              <div class="v" style="font-size:20px;">${totalTuition !== null ? formatMoney(totalTuition) : 'Not mapped yet'}</div>
+        <div class="program-head">
+          <div>
+            <h2 class="program-title">${program.program_name}</h2>
+            <div class="chips">
+              <span class="chip">${program.category}</span>
+              <span class="chip">PGWP Eligible</span>
+              <span class="chip">${program.planner_type === 'course_planner' ? 'Course Planner' : 'Fixed Structure'}</span>
             </div>
           </div>
-          <div class="section-title">Fee details</div>
+          <div class="hero-total">
+            <div class="k">${heroLabel}</div>
+            <div class="v">${heroValue}</div>
+            <div class="s">${currencySelect.value === 'CAD' ? 'CAD source shown directly where mapped' : 'Converted from CAD source'}</div>
+          </div>
+        </div>
+
+        <div class="stats">
+          ${stat('Duration', program.duration_text || '—')}
+          ${stat('Total courses', totalCourses !== null ? totalCourses : '—')}
+          ${stat('Course fee', courseFee !== null ? formatMoney(courseFee) : 'Not mapped')}
+          ${stat('Estimated first-year tuition', y1 !== null ? formatMoney(y1) : 'Not mapped')}
+        </div>
+
+        <div class="section">
+          <h2>Fee snapshot</h2>
           <table>
             <tr><th>Item</th><th>Value</th></tr>
-            <tr><td>Course fee</td><td>${courseFee !== null ? formatMoney(courseFee) : 'Not mapped yet'}</td></tr>
-            <tr><td>Total tuition (CAD source)</td><td>${totalTuition !== null ? new Intl.NumberFormat('en-CA', {style:'currency', currency:'CAD', maximumFractionDigits:0}).format(totalTuition) : 'Not mapped yet'}</td></tr>
-            <tr><td>Planner type</td><td>${program.planner_type}</td></tr>
-            <tr><td>Source status</td><td>${program.pgwp_eligible ? 'Included from PGWP-eligible list' : 'Excluded'}</td></tr>
+            <tr><td>Program</td><td>${program.program_name}</td></tr>
+            <tr><td>Program type</td><td>${program.category}</td></tr>
+            <tr><td>Duration</td><td>${program.duration_text || '—'}</td></tr>
+            <tr><td>Per-course fee</td><td>${courseFee !== null ? `${formatMoney(courseFee)} <span class="muted">(${formatCad(courseFee)} CAD source)</span>` : 'Not mapped yet'}</td></tr>
+            <tr><td>Estimated first-year tuition</td><td>${y1 !== null ? `${formatMoney(y1)} <span class="muted">(${formatCad(y1)} CAD source)</span>` : 'Not mapped yet'}</td></tr>
+            <tr><td>Official total tuition</td><td>${totalTuition !== null ? `${formatMoney(totalTuition)} <span class="muted">(${formatCad(totalTuition)} CAD source)</span>` : 'Not mapped yet'}</td></tr>
+            <tr><td>Planner type</td><td>${program.planner_type === 'course_planner' ? 'Semester course planner' : 'Fixed tuition structure'}</td></tr>
           </table>
-          ${notes}
+          ${program.notes ? `<div class="footnote">${program.notes}</div>` : ''}
         </div>
       `;
     }
 
     function buildFixed(program) {
       const totalTuition = safeNum(program.total_tuition_cad);
+      let details = '<li>This program is stored as a fixed-structure row.</li><li>The semester course selector is intentionally hidden for this program.</li>';
+      if (program.program_name === 'Master of Business Administration') {
+        details += '<li>MBA is shown as a fixed graduate structure, with first-year tuition and overall tuition based on the mapped graduate totals.</li>';
+      }
+      if (program.program_name === 'Master of Education' || program.program_name === 'Master of Arts in Human Rights and Social Justice') {
+        details += '<li>This graduate program uses a first-year three-semester structure rather than the non-graduate planner rules.</li>';
+      }
       plannerArea.innerHTML = `
-        <div>
-          <h2 style="margin:0 0 8px; color: var(--accent);">Fixed program structure</h2>
-          <div class="empty" style="margin-bottom: 14px;">
-            This program is stored as a fixed-structure row. The semester course selector is not shown for this program.
-          </div>
+        <div class="side-block">
+          <h3>Fixed program structure</h3>
+          <div class="planner-note">Use this view for graduate and other fixed-pattern programs. The page shows the mapped tuition figures rather than a semester-by-semester selector.</div>
           <table>
             <tr><th>Field</th><th>Value</th></tr>
             <tr><td>Program</td><td>${program.program_name}</td></tr>
             <tr><td>Duration</td><td>${program.duration_text || '—'}</td></tr>
-            <tr><td>Mapped total tuition</td><td>${totalTuition !== null ? formatMoney(totalTuition) : 'Not mapped yet'}</td></tr>
+            <tr><td>Official total tuition</td><td>${totalTuition !== null ? `${formatMoney(totalTuition)} <span class="muted">(${formatCad(totalTuition)} CAD source)</span>` : 'Not mapped yet'}</td></tr>
             <tr><td>Notes</td><td>${program.notes || '—'}</td></tr>
           </table>
+        </div>
+        <div class="side-block">
+          <h3>How this row behaves</h3>
+          <ul class="mini-list">${details}</ul>
         </div>
       `;
     }
@@ -420,29 +424,31 @@
       const courseFee = safeNum(program.course_fee_cad) || COURSE_FEE_DEFAULT;
       const totalTuition = safeNum(program.total_tuition_cad);
       if (!cfg) {
-        plannerArea.innerHTML = `<div class="empty">This row does not yet have enough mapped data to build the semester planner.</div>`;
+        plannerArea.innerHTML = `<div class="empty">This row does not yet have enough mapped information to build the semester planner.</div>`;
         return;
       }
       plannerArea.innerHTML = `
-        <div>
-          <h2 style="margin:0 0 8px; color: var(--accent);">Semester planner</h2>
-          <div class="hint" style="margin-bottom:12px;">Semester 1 is locked at 4 courses. Main semesters are 3–5 courses. May semester is optional and capped at 2 courses. No extension beyond the official duration is assumed.</div>
+        <div class="side-block">
+          <h3>Semester planner</h3>
+          <div class="planner-note">Semester 1 is locked at 4 courses. Remaining Fall and Winter semesters allow 3 to 5 courses. May semesters are optional and capped at 2 courses. The planner does not assume extensions beyond the official program duration.</div>
           <div class="stats">
-            <div class="stat"><div class="k">Main semesters</div><div class="v">${cfg.mainSemesters}</div></div>
-            <div class="stat"><div class="k">Optional May semesters</div><div class="v">${cfg.maySemesters}</div></div>
-            <div class="stat"><div class="k">Selected courses</div><div class="v" id="selectedCoursesStat">0</div></div>
-            <div class="stat"><div class="k">Remaining courses</div><div class="v" id="remainingCoursesStat">${cfg.totalCourses}</div></div>
+            ${stat('Main semesters', cfg.mainSemesters)}
+            ${stat('Optional May semesters', cfg.maySemesters)}
+            ${stat('Selected courses', `<span id="selectedCoursesStat">0</span>`)}
+            ${stat('Remaining courses', `<span id="remainingCoursesStat">${cfg.totalCourses}</span>`)}
           </div>
-          <div class="section-title">Plan your semesters</div>
+        </div>
+        <div class="section">
+          <h2>Plan your semesters</h2>
           <table>
             <thead>
-              <tr><th>Semester</th><th>Allowed</th><th>Courses</th><th>Semester fee</th></tr>
+              <tr><th>Semester</th><th>Allowed</th><th>Courses</th><th>Estimated tuition</th></tr>
             </thead>
             <tbody>
               ${cfg.semesters.map((s, i) => `
                 <tr>
                   <td>${s.label}</td>
-                  <td>${s.min}–${s.max}</td>
+                  <td>${s.min}-${s.max}</td>
                   <td>
                     <select class="sem-select" data-idx="${i}">
                       ${Array.from({ length: s.max - s.min + 1 }, (_, k) => s.min + k).map(v => `<option value="${v}" ${v === s.value ? 'selected' : ''}>${v}</option>`).join('')}
@@ -453,21 +459,20 @@
               `).join('')}
             </tbody>
           </table>
-          <div class="section-title">Totals</div>
+        </div>
+        <div class="section">
+          <h2>Planner totals</h2>
           <table>
             <tr><th>Item</th><th>Value</th></tr>
-            <tr><td>Year 1 estimated tuition</td><td id="year1Total">—</td></tr>
-            <tr><td>Estimated total based on selected plan</td><td id="selectedTotal">—</td></tr>
-            <tr><td>Mapped official total tuition</td><td>${totalTuition !== null ? formatMoney(totalTuition) : 'Not mapped yet'}</td></tr>
+            <tr><td>Estimated first-year tuition</td><td id="year1Total">—</td></tr>
+            <tr><td>Estimated tuition based on selected plan</td><td id="selectedTotal">—</td></tr>
+            <tr><td>Official total tuition</td><td>${totalTuition !== null ? `${formatMoney(totalTuition)} <span class="muted">(${formatCad(totalTuition)} CAD source)</span>` : 'Not mapped yet'}</td></tr>
           </table>
-          <div id="plannerWarn" class="warn"></div>
-          <div id="plannerOk" class="ok"></div>
+          <div id="plannerWarn" class="feedback warn"></div>
+          <div id="plannerOk" class="feedback ok"></div>
         </div>
       `;
-
-      [...plannerArea.querySelectorAll('.sem-select')].forEach(sel => {
-        sel.addEventListener('change', () => refreshPlanner(program));
-      });
+      [...plannerArea.querySelectorAll('.sem-select')].forEach(sel => sel.addEventListener('change', () => refreshPlanner(program)));
       refreshPlanner(program);
     }
 
@@ -478,35 +483,28 @@
       let selectedCourses = 0;
       let year1TotalCad = 0;
       let selectedTotalCad = 0;
+      let remainingCapacity = 0;
       selects.forEach((sel, i) => {
         const value = Number(sel.value);
+        const semester = cfg.semesters[i];
         selectedCourses += value;
         selectedTotalCad += value * courseFee;
         if (i < 3) year1TotalCad += value * courseFee;
+        remainingCapacity += (semester.max - value);
         const feeCell = plannerArea.querySelector(`.sem-fee[data-idx="${i}"]`);
         if (feeCell) feeCell.textContent = formatMoney(value * courseFee);
       });
       const remaining = cfg.totalCourses - selectedCourses;
-      const remainingMain = cfg.semesters
-        .filter((s, i) => s.type === 'main' && Number(selects[i].value) < s.max)
-        .reduce((acc, s, i) => acc + (s.max - Number(selects[cfg.semesters.indexOf(s)].value)), 0);
-      const remainingMay = cfg.semesters
-        .filter((s, i) => s.type === 'may' && Number(selects[i].value) < s.max)
-        .reduce((acc, s, i) => acc + (s.max - Number(selects[cfg.semesters.indexOf(s)].value)), 0);
-      const remainingCapacity = remainingMain + remainingMay;
-
       plannerArea.querySelector('#selectedCoursesStat').textContent = selectedCourses;
       plannerArea.querySelector('#remainingCoursesStat').textContent = remaining;
-      plannerArea.querySelector('#year1Total').textContent = formatMoney(year1TotalCad);
-      plannerArea.querySelector('#selectedTotal').textContent = formatMoney(selectedTotalCad);
-
+      plannerArea.querySelector('#year1Total').textContent = `${formatMoney(year1TotalCad)} (${formatCad(year1TotalCad)} CAD source)`;
+      plannerArea.querySelector('#selectedTotal').textContent = `${formatMoney(selectedTotalCad)} (${formatCad(selectedTotalCad)} CAD source)`;
       const warn = plannerArea.querySelector('#plannerWarn');
       const ok = plannerArea.querySelector('#plannerOk');
       warn.style.display = 'none';
       ok.style.display = 'none';
-
       if (remaining > 0 && remaining > remainingCapacity) {
-        warn.textContent = `You have ${remaining} courses remaining, but the unused capacity across the remaining official semesters is only ${remainingCapacity}. This plan will not complete the program within the official duration.`;
+        warn.textContent = `You still need ${remaining} course(s), but the unused capacity across the remaining official semesters is only ${remainingCapacity}. This plan will not complete the program within the official duration.`;
         warn.style.display = 'block';
       } else if (remaining > 0) {
         ok.textContent = `This plan is still workable. ${remaining} course(s) remain to be distributed across the remaining official semesters.`;
@@ -525,11 +523,7 @@
       programSearch.value = program.program_name;
       suggestions.style.display = 'none';
       buildSummary(program);
-      if (program.planner_type === 'course_planner') {
-        buildPlanner(program);
-      } else {
-        buildFixed(program);
-      }
+      if (program.planner_type === 'course_planner') buildPlanner(program); else buildFixed(program);
     }
 
     async function loadFx() {
@@ -537,14 +531,12 @@
         const res = await fetch('https://open.er-api.com/v6/latest/CAD');
         const data = await res.json();
         if (data && data.rates) {
-          ['CAD', 'INR', 'BDT', 'NPR', 'LKR', 'PKR'].forEach(c => {
-            if (data.rates[c]) fxRates[c] = data.rates[c];
-          });
+          ['CAD','INR','BDT','NPR','LKR','PKR'].forEach(c => { if (data.rates[c]) fxRates[c] = data.rates[c]; });
           fxHint.textContent = 'Live exchange rates loaded from CAD base.';
         } else {
           fxHint.textContent = 'Using built-in exchange rates.';
         }
-      } catch (e) {
+      } catch(e) {
         fxHint.textContent = 'Using built-in exchange rates.';
       }
     }
@@ -552,22 +544,20 @@
     async function loadPrograms() {
       try {
         const res = await fetch('tru_pgwp_programs_master.json');
-        programs = await res.json();
-        programs = programs.filter(p => p.pgwp_eligible).sort((a, b) => a.program_name.localeCompare(b.program_name));
-        filterPrograms('');
+        const rows = await res.json();
+        programs = enrichPrograms(rows.filter(p => p.pgwp_eligible)).sort((a,b)=>a.program_name.localeCompare(b.program_name));
+        showSuggestions(programs.slice(0, 12));
       } catch (e) {
-        summary.innerHTML = `<div class="empty">The JSON file could not be loaded. Keep <strong>tru_pgwp_calculator.html</strong> and <strong>tru_pgwp_programs_master.json</strong> in the same folder when you host the page.</div>`;
+        summary.innerHTML = '<div class="empty">The JSON file could not be loaded. Keep <strong>index.html</strong> and <strong>tru_pgwp_programs_master.json</strong> in the same folder when you host the page.</div>';
       }
     }
 
-    programSearch.addEventListener('input', (e) => filterPrograms(e.target.value));
+    programSearch.addEventListener('input', e => filterPrograms(e.target.value));
     programSearch.addEventListener('focus', () => filterPrograms(programSearch.value));
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', e => {
       if (!suggestions.contains(e.target) && e.target !== programSearch) suggestions.style.display = 'none';
     });
-    currencySelect.addEventListener('change', () => {
-      if (selectedProgram) selectProgram(selectedProgram);
-    });
+    currencySelect.addEventListener('change', () => { if (selectedProgram) selectProgram(selectedProgram); else filterPrograms(programSearch.value); });
 
     loadFx();
     loadPrograms();
