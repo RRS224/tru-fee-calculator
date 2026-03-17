@@ -1,204 +1,354 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TRU Tuition Calculator</title>
-
 <style>
-
-body{
-font-family:Arial, Helvetica, sans-serif;
-background:#f4f6f8;
-margin:0;
-padding:40px;
-}
-
-.container{
-max-width:1100px;
-margin:auto;
-background:white;
-padding:30px;
-border-radius:10px;
-box-shadow:0 0 15px rgba(0,0,0,0.08);
-}
-
-h1{
-margin-top:0;
-}
-
-.searchbox{
-width:100%;
-padding:12px;
-font-size:16px;
-margin-bottom:20px;
-border:1px solid #ccc;
-border-radius:6px;
-}
-
-.summary{
-background:#eef4ff;
-padding:20px;
-border-radius:8px;
-margin-bottom:20px;
-}
-
-.yearblock{
-border-top:1px solid #eee;
-padding-top:20px;
-margin-top:20px;
-}
-
-.semester{
-display:flex;
-justify-content:space-between;
-padding:6px 0;
-}
-
-.totalyear{
-font-weight:bold;
-margin-top:10px;
-}
-
+  :root{
+    --bg:#f4f6f8; --card:#fff; --line:#dde3ea; --soft:#eef4ff;
+    --text:#1b2733; --muted:#617080; --brand:#0f4c81;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+  .wrap{max-width:1320px;margin:28px auto;padding:0 18px 28px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px 28px;box-shadow:0 10px 28px rgba(15,23,42,.05)}
+  h1{margin:10px 0 8px;font-size:34px;line-height:1.15;letter-spacing:-.02em}
+  .sub{margin:0 0 18px;color:var(--muted);font-size:16px}
+  .searchWrap{position:relative}
+  .search{width:100%;height:58px;padding:0 16px;border:2px solid #cad4df;border-radius:14px;font-size:16px;outline:none;background:#fff}
+  .search:focus{border-color:#76a4d1;box-shadow:0 0 0 4px rgba(15,76,129,.08)}
+  .hint{margin-top:10px;color:var(--muted);font-size:14px}
+  .suggestions{position:absolute;top:64px;left:0;right:0;z-index:50;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 36px rgba(15,23,42,.14);overflow:hidden;display:none;max-height:420px;overflow-y:auto}
+  .sItem{padding:14px 16px;border-bottom:1px solid #edf1f5;cursor:pointer}
+  .sItem:last-child{border-bottom:none}
+  .sItem:hover,.sItem.active{background:#f8fbff}
+  .sTitle{font-size:17px;font-weight:700;margin-bottom:4px}
+  .sMeta{font-size:13px;color:var(--muted)}
+  .noResults{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--muted);background:#fff;display:none}
+  .results{margin-top:18px}
+  .empty{margin-top:18px;border:1px dashed #d9e1ea;border-radius:14px;padding:18px;color:var(--muted);background:#fafbfd}
+  .hero{background:var(--soft);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+  .programName{margin:0 0 10px;font-size:28px;line-height:1.2;font-weight:800}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:16px}
+  .summaryGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+  .summaryCard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .label{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .value{font-size:30px;line-height:1.08;font-weight:800}
+  .value.small{font-size:22px}
+  .yearList{margin-top:8px;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+  .year{padding:12px 16px 10px;border-bottom:1px solid #e9eef3}
+  .year:last-child{border-bottom:none}
+  .yearTitle{margin:0 0 8px;font-size:16px;font-weight:800}
+  .row{display:grid;grid-template-columns:1fr auto;gap:14px;padding:2px 0;align-items:center;font-size:15px;line-height:1.22}
+  .row.total{margin-top:5px;padding-top:6px;border-top:1px dashed #d8e1ea;font-size:16px;font-weight:800}
+  .foot{margin-top:10px;color:var(--muted);font-size:13px}
+  .notice{background:#fff8e6;border:1px solid #ecd9a6;color:#5b4b1b;border-radius:14px;padding:14px 16px;line-height:1.45}
+  @media (max-width:760px){.wrap{padding:0 12px 18px}.panel{padding:18px 16px}h1{font-size:30px}.programName{font-size:24px}}
 </style>
 </head>
-
 <body>
+<div class="wrap">
+  <div class="panel">
+    <h1>TRU Tuition Calculator (PGWP-Eligible Programs)</h1>
+    <p class="sub">Start typing a program name. Select one of the matching program cards to view the tuition structure.</p>
 
-<div class="container">
+    <div class="searchWrap">
+      <input id="search" class="search" type="text" autocomplete="off" placeholder="Type program name (MBA, BBA, Nursing, Data Science...)" />
+      <div id="suggestions" class="suggestions"></div>
+    </div>
 
-<h1>TRU Tuition Calculator (PGWP-Eligible Programs)</h1>
-
-<input class="searchbox" id="search" placeholder="Type program name (MBA, BBA, Nursing, Data Science...)">
-
-<div id="programinfo"></div>
-
+    <div class="hint">Only PGWP-eligible programs from the TRU international programs page are included.</div>
+    <div id="noResults" class="noResults">No matching PGWP-eligible programs found.</div>
+    <div id="results" class="results"><div class="empty">Nothing is selected yet. Start typing above to see matching programs.</div></div>
+  </div>
 </div>
 
 <script>
+const COURSE_FEE = 2623;
+const GRAD_TOTALS = {
+  "Graduate Diploma in Business Administration": 17979,
+  "Master of Business Administration": 57235,
+  "Master of Science in Data Science": 51186,
+  "Master of Engineering Science (Software Engineering)": 46235,
+  "Master of Education": 37673,
+  "Graduate Certificate in Educational Studies (Pre-M.Ed.)": 11302,
+  "Master in Environmental Economics and Management": 39149,
+  "Master of Science in Environmental Science": 44990,
+  "Master of Arts in Human Rights and Social Justice": 37673,
+  "Master of Science in Environmental Economics and Management (MScEEM)": 40132
+};
 
-let programs=[]
-const courseFee=2623
+let programs = [];
+let filtered = [];
+let activeIndex = -1;
 
-fetch("tru_pgwp_programs_master.json")
-.then(r=>r.json())
-.then(data=>{
-programs=data
-})
+const searchEl = document.getElementById('search');
+const suggestionsEl = document.getElementById('suggestions');
+const resultsEl = document.getElementById('results');
+const noResultsEl = document.getElementById('noResults');
 
-document.getElementById("search").addEventListener("input",function(){
+function normalize(text){
+  return (text || '')
+    .toLowerCase()
+    .replace(/[–—]/g, '-')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9\s-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function tokens(text){ return normalize(text).split(' ').filter(Boolean); }
+function money(n){ return '$' + Number(n).toLocaleString('en-CA'); }
 
-let text=this.value.toLowerCase()
+function initialsFromName(name){
+  const skip = new Set(['of','and','in','the','for','to','with','year','first','second']);
+  return tokens(name).filter(t => !skip.has(t)).map(t => t[0]).join('');
+}
+function aliasList(program){
+  const n = normalize(program.program_name);
+  const list = [n];
+  const init = initialsFromName(n);
+  if (init) list.push(init);
 
-let matches=programs.filter(p=>{
-
-let name=p.program_name.toLowerCase()
-
-return name.includes(text)
-||
-(text==="mba" && name.includes("business administration"))
-||
-(text==="bba" && name.includes("business administration"))
-||
-(text==="bsc" && name.includes("science"))
-})
-
-if(matches.length>0){
-showProgram(matches[0])
+  if (n.includes('master of business administration')) list.push('mba');
+  if (n.includes('bachelor of business administration')) list.push('bba');
+  if (n === 'bachelor of arts') list.push('ba');
+  if (n === 'bachelor of science') list.push('bsc');
+  if (n.includes('juris doctor')) list.push('jd');
+  if (n.includes('nursing')) list.push('nursing');
+  if (n.includes('practical nursing')) list.push('practical nursing');
+  if (n.includes('data science')) list.push('data science');
+  if (n.includes('engineering')) list.push('engineering');
+  if (n.includes('education')) list.push('education');
+  if (n.includes('human rights')) list.push('human rights');
+  if (n.includes('computing science')) list.push('computing science');
+  if (n.includes('communication and digital journalism')) list.push('bcdj');
+  if (n.includes('environmental economics and management')) list.push('meem');
+  return [...new Set(list)];
 }
 
-})
+function scoreProgram(program, query){
+  const q = normalize(query);
+  if (!q) return -1;
+  const qTokens = tokens(q);
+  const name = normalize(program.program_name);
+  const nameTokens = tokens(name);
+  const aliases = aliasList(program);
+  const aliasTokens = aliases.flatMap(a => tokens(a));
 
-function showProgram(p){
+  if (aliases.includes(q) || name === q) return 1000;
+  if (name.startsWith(q)) return 900;
 
-let years=4
-let totalCourses=p.total_courses || 40
+  if (qTokens.length === 1){
+    const qt = qTokens[0];
+    const aliasPrefix = aliases.some(a => a.startsWith(qt));
+    const tokenPrefix = nameTokens.some(t => t.startsWith(qt));
+    const initialsPrefix = initialsFromName(name).startsWith(qt);
 
-if(p.category==="Graduate"){
-renderGraduate(p)
-return
+    if (!(aliasPrefix || tokenPrefix || initialsPrefix)) return -1;
+
+    let score = 0;
+    if (aliasPrefix) score += 350;
+    if (tokenPrefix) score += 320;
+    if (initialsPrefix) score += 260;
+    if (qt === 'b' && name.startsWith('bachelor')) score += 160;
+    if (qt === 'ba' && name === 'bachelor of arts') score += 190;
+    if (qt === 'bsc' && name === 'bachelor of science') score += 190;
+    if (qt === 'bba' && name.includes('bachelor of business administration')) score += 220;
+    if (qt === 'mba' && name.includes('master of business administration')) score += 220;
+    return score;
+  }
+
+  const universe = [...new Set([...nameTokens, ...aliasTokens])];
+  const ok = qTokens.every(qt => universe.some(tok => tok.startsWith(qt)));
+  if (!ok) return -1;
+
+  let score = 220;
+  if (name.includes(q)) score += 120;
+  return score;
 }
 
-let html=`<div class="summary">
-<h2>${p.program_name}</h2>
-Program length: ${years} years
-</div>`
-
-let coursesRemaining=totalCourses
-
-for(let y=1;y<=years;y++){
-
-let fall=4
-let winter=4
-let may=2
-
-let fallCost=fall*courseFee
-let winterCost=winter*courseFee
-let mayCost=may*courseFee
-
-let yearTotal=fallCost+winterCost+mayCost
-
-html+=`
-<div class="yearblock">
-
-<h3>Year ${y}</h3>
-
-<div class="semester">
-<span>Fall (${fall} courses)</span>
-<span>$${fallCost.toLocaleString()}</span>
-</div>
-
-<div class="semester">
-<span>Winter (${winter} courses)</span>
-<span>$${winterCost.toLocaleString()}</span>
-</div>
-
-<div class="semester">
-<span>May (${may} courses)</span>
-<span>$${mayCost.toLocaleString()}</span>
-</div>
-
-<div class="totalyear">
-Total Year ${y}: $${yearTotal.toLocaleString()}
-</div>
-
-</div>
-`
-
+function parseYears(durationText, totalCourses){
+  const txt = (durationText || '').toLowerCase();
+  const m = txt.match(/(\d+(?:\.\d+)?)\s*years?/);
+  if (m) return Math.max(1, Math.ceil(parseFloat(m[1])));
+  if (txt.includes('16 continuous months')) return 2;
+  if (txt.includes('8 months')) return 1;
+  const c = Number(totalCourses || 0);
+  if (c === 50) return 5;
+  if (c === 40) return 4;
+  if (c === 30) return 2;
+  if ([24,22,21,20].includes(c)) return 2;
+  if ([12,10].includes(c)) return 1;
+  return 1;
 }
 
-let total=totalCourses*courseFee
-
-html+=`
-<div class="summary">
-<h2>Total Program Tuition</h2>
-$${total.toLocaleString()} CAD
-</div>
-`
-
-document.getElementById("programinfo").innerHTML=html
-
+function renderSuggestions(items){
+  if (!items.length){
+    suggestionsEl.style.display = 'none';
+    return;
+  }
+  suggestionsEl.innerHTML = items.map((p, idx) => `
+    <div class="sItem ${idx===activeIndex ? 'active' : ''}" data-index="${idx}">
+      <div class="sTitle">${p.program_name}</div>
+      <div class="sMeta">${p.category} · ${p.duration_text || 'Duration varies'}</div>
+    </div>
+  `).join('');
+  suggestionsEl.style.display = 'block';
+  suggestionsEl.querySelectorAll('.sItem').forEach(el => {
+    el.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      const chosen = items[Number(el.dataset.index)];
+      selectProgram(chosen);
+    });
+  });
 }
-
-function renderGraduate(p){
-
-let html=`<div class="summary">
-
-<h2>${p.program_name}</h2>
-
-Program length: 2 years
-
-Year 1 tuition: $27,784 CAD  
-Year 2 tuition: $27,784 CAD
-
-<h3>Total tuition: $55,568 CAD</h3>
-
-</div>`
-
-document.getElementById("programinfo").innerHTML=html
-
+function showEmpty(text){
+  resultsEl.innerHTML = `<div class="empty">${text}</div>`;
 }
+function renderFixed(program){
+  const total = GRAD_TOTALS[program.program_name] || (program.total_tuition_cad ? Number(program.total_tuition_cad) : null);
+  let summary = '';
+  if (total && /2 years/i.test(program.duration_text || '')){
+    const y1 = Math.round(total / 2);
+    const y2 = total - y1;
+    summary = `
+      <div class="summaryGrid">
+        <div class="summaryCard"><div class="label">Year 1 tuition</div><div class="value small">${money(y1)} CAD</div></div>
+        <div class="summaryCard"><div class="label">Year 2 tuition</div><div class="value small">${money(y2)} CAD</div></div>
+        <div class="summaryCard"><div class="label">Total program tuition</div><div class="value">${money(total)} CAD</div></div>
+      </div>`;
+  } else if (total) {
+    summary = `
+      <div class="summaryGrid">
+        <div class="summaryCard"><div class="label">Total program tuition</div><div class="value">${money(total)} CAD</div></div>
+      </div>`;
+  } else {
+    summary = `<div class="notice">This PGWP-eligible program is included, but the exact student-facing tuition breakdown for this row is still being finalized.</div>`;
+  }
 
+  resultsEl.innerHTML = `
+    <div class="hero">
+      <h2 class="programName">${program.program_name}</h2>
+      <div class="meta"><div><strong>Program length:</strong> ${program.duration_text || 'See official page'}</div></div>
+    </div>
+    ${summary}
+  `;
+}
+function renderCourse(program){
+  const totalCourses = Number(program.total_courses || 0);
+  const courseFee = Number(program.course_fee_cad || COURSE_FEE);
+  const years = parseYears(program.duration_text, totalCourses);
+  const officialTotal = program.total_tuition_cad ? Number(program.total_tuition_cad) : null;
+  const computedTotal = totalCourses ? totalCourses * courseFee : null;
+  const finalTotal = officialTotal || computedTotal;
+
+  if (!totalCourses || !finalTotal){
+    resultsEl.innerHTML = `
+      <div class="hero">
+        <h2 class="programName">${program.program_name}</h2>
+        <div class="meta"><div><strong>Program length:</strong> ${program.duration_text || 'See official page'}</div></div>
+      </div>
+      <div class="notice">This program is PGWP-eligible, but its exact tuition structure has not yet been finalized in this calculator. Please refer to the official TRU page for the current fee details for this specific program.</div>
+    `;
+    return;
+  }
+
+  let yearsHtml = '';
+  for (let y = 1; y <= years; y++){
+    const fall=4, winter=4, may=2;
+    const yearTotal = (fall + winter + may) * courseFee;
+    yearsHtml += `
+      <div class="year">
+        <div class="yearTitle">Year ${y}</div>
+        <div class="row"><div>Fall (${fall} courses)</div><div>${money(fall * courseFee)}</div></div>
+        <div class="row"><div>Winter (${winter} courses)</div><div>${money(winter * courseFee)}</div></div>
+        <div class="row"><div>May (${may} courses)</div><div>${money(may * courseFee)}</div></div>
+        <div class="row total"><div>Total Year ${y}</div><div>${money(yearTotal)}</div></div>
+      </div>`;
+  }
+
+  resultsEl.innerHTML = `
+    <div class="hero">
+      <h2 class="programName">${program.program_name}</h2>
+      <div class="meta">
+        <div><strong>Program length:</strong> ${program.duration_text || (years + ' years')}</div>
+        <div><strong>Total courses:</strong> ${totalCourses}</div>
+      </div>
+    </div>
+
+    <div class="summaryGrid">
+      <div class="summaryCard"><div class="label">Typical first-year tuition</div><div class="value small">${money(10 * courseFee)} CAD</div></div>
+      <div class="summaryCard"><div class="label">Official total program tuition</div><div class="value">${money(finalTotal)} CAD</div></div>
+    </div>
+
+    <div class="yearList">${yearsHtml}</div>
+    <div class="foot">This calculator uses a default plan of 4 Fall courses, 4 Winter courses, and 2 May courses per year for course-based programs.</div>
+  `;
+}
+function selectProgram(program){
+  searchEl.value = program.program_name;
+  suggestionsEl.style.display = 'none';
+  noResultsEl.style.display = 'none';
+  if (program.planner_type === 'fixed') renderFixed(program);
+  else renderCourse(program);
+}
+function updateMatches(){
+  const q = searchEl.value;
+  const qn = normalize(q);
+
+  if (!qn){
+    filtered = [];
+    activeIndex = -1;
+    suggestionsEl.style.display = 'none';
+    noResultsEl.style.display = 'none';
+    showEmpty('Nothing is selected yet. Start typing above to see matching programs.');
+    return;
+  }
+
+  filtered = programs
+    .map(p => ({p, score: scoreProgram(p, qn)}))
+    .filter(x => x.score >= 0)
+    .sort((a,b) => b.score - a.score || a.p.program_name.localeCompare(b.p.program_name))
+    .map(x => x.p)
+    .slice(0, 12);
+
+  activeIndex = filtered.length ? 0 : -1;
+  renderSuggestions(filtered);
+  noResultsEl.style.display = filtered.length ? 'none' : 'block';
+  showEmpty(filtered.length ? 'Select one of the matching program cards above to view the tuition structure.' : 'Nothing is selected yet.');
+}
+searchEl.addEventListener('input', updateMatches);
+searchEl.addEventListener('keydown', e => {
+  if (suggestionsEl.style.display !== 'block') return;
+  if (e.key === 'ArrowDown'){
+    e.preventDefault();
+    activeIndex = Math.min(activeIndex + 1, filtered.length - 1);
+    renderSuggestions(filtered);
+  } else if (e.key === 'ArrowUp'){
+    e.preventDefault();
+    activeIndex = Math.max(activeIndex - 1, 0);
+    renderSuggestions(filtered);
+  } else if (e.key === 'Enter'){
+    e.preventDefault();
+    if (activeIndex >= 0 && filtered[activeIndex]) selectProgram(filtered[activeIndex]);
+  } else if (e.key === 'Escape'){
+    suggestionsEl.style.display = 'none';
+  }
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.searchWrap')) suggestionsEl.style.display = 'none';
+});
+
+fetch('tru_pgwp_programs_master.json')
+  .then(r => r.json())
+  .then(data => {
+    programs = data;
+    showEmpty('Nothing is selected yet. Start typing above to see matching programs.');
+  })
+  .catch(() => {
+    resultsEl.innerHTML = '<div class="notice">The program data file could not be loaded. Please refresh the page.</div>';
+  });
 </script>
-
 </body>
 </html>
