@@ -340,7 +340,7 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.searchWrap')) suggestionsEl.style.display = 'none';
 });
 
-fetch('tru_pgwp_programs_master.json')
+fetch('./tru_pgwp_programs_master.json')
   .then(r => r.json())
   .then(data => {
     programs = data;
