@@ -15,10 +15,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-FEES_FILE = Path("fees_scraped.json")
-STRUCTURES_FILE = Path("structures_scraped.json")
-OVERRIDES_FILE = Path("rules_overrides.json")
-OUTPUT_FILE = Path("tru_pgwp_programs_master.generated.json")
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parent
+
+FEES_FILE = SCRIPT_DIR / "fees_scraped.json"
+STRUCTURES_FILE = SCRIPT_DIR / "structures_scraped.json"
+OVERRIDES_FILE = REPO_ROOT / "rules_overrides.json"
+OUTPUT_FILE = REPO_ROOT / "tru_pgwp_programs_master.generated.json"
 
 
 def load_json(path: Path):
@@ -59,17 +62,25 @@ def main() -> None:
             "semesters_declared": structure.get("semesters_declared"),
             "semesters_display": semesters,
             "display_mode": override.get("display_mode", "standard"),
-            "semester_plan": override.get("semester_plan"),
+            "year_semester_plan": override.get("year_semester_plan"),
             "exclude_from_search": override.get("exclude_from_search", False),
-            "notes": [n for n in [
-                fee.get("notes"),
-                *structure.get("notes", []),
-                *override.get("notes", []),
-            ] if n],
+            "search_aliases": override.get("search_aliases", []),
+            "notes": [
+                n
+                for n in [
+                    fee.get("notes"),
+                    *structure.get("notes", []),
+                    *override.get("notes", []),
+                ]
+                if n
+            ],
         }
         merged.append(row)
 
-    OUTPUT_FILE.write_text(json.dumps(merged, indent=2, ensure_ascii=False), encoding="utf-8")
+    OUTPUT_FILE.write_text(
+        json.dumps(merged, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
     print(f"Wrote {len(merged)} merged rows to {OUTPUT_FILE}")
 
 
