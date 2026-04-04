@@ -1,0 +1,35 @@
+{
+  "program_overrides": [
+    {
+      "program_name": "Master of Business Administration",
+      "display_mode": "grad_semester_only",
+      "semesters_display": 5,
+      "semester_plan": [
+        2,
+        3
+      ],
+      "exclude_from_search": false,
+      "notes": [
+        "Use the 2-year MBA only.",
+        "Do not display or search the 1-year MBA.",
+        "Display as one MBA total split across 5 semesters."
+      ]
+    },
+    {
+      "program_name": "1 Year MBA (if GDBA is not required)",
+      "display_mode": "exclude",
+      "exclude_from_search": true,
+      "notes": [
+        "Exclude from student-facing calculator for this workflow."
+      ]
+    },
+    {
+      "program_name": "Master of Education",
+      "display_mode": "grad_semester_only",
+      "notes": [
+        "Do not show year-by-year for now.",
+        "Fees page notes 3 semesters, with a possible 4th semester for project/thesis."
+      ]
+    }
+  ]
+}
